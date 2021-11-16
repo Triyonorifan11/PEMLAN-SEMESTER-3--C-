@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+/*
+Nama : Triyono Rifan
+NPM  : 20081010003
+Kelas: Pemrograman Lanjut B081
+*/
 
 struct buku{
 	long long int kode;
@@ -9,7 +14,7 @@ struct buku{
 	char judul[25];
 	int convert_string;
 }buku[10];
-//typedef struct buku Perpus_buku[10];
+
 
 
 int j = 0;
@@ -185,73 +190,66 @@ void SortNamaBubble(){
 	}
 }
 
-//Cari berdasarkan Nama
-void interpolationSearch(){
-	printf("Mohon maaf belum paham dengan interpolation search pada string");
-//	int i,c,d,j;
-//	int a = sizeof(buku)/sizeof(buku[0]);
-//	int length[a];
-//	
-//	 for ( i = 0; i < a; i++){
-//        length[i] = strlen(buku[i].judul);
-//        
-//        for ( j = 0; j < length[i]; j++){
-//            buku[i].convert_string += buku[i].judul[j];
-//        }
-//        printf("%d. %d\n",i+1, buku[i].convert_string);
-//    }
-//	
-//	char string_cari[50];
-//    int convert_string = 0;
-//    printf("Masukkan Judul Buku yang ingin dicari : ");
-//    fflush(stdin); gets(string_cari);
-//    
-//    int  panjang = strlen(string_cari);
-//    for ( i = 0; i < panjang; i++){
-//       	convert_string += string_cari[i];
-//    }
-//    
-//    for ( c = 0; c < 10; c++){
-//        int temp;
-//        temp = buku[c].convert_string;
-//        d = c-1;
-//            while (d>=0 && buku[d].convert_string > temp){
-//                buku[d+1].convert_string = buku[d].convert_string;
-//                d = d-1;
-//            }
-//        buku[d+1].convert_string = temp;
-//    }
-//	
-//	
-//    int low = 0;
-//    int high = a - 1;
-//    int position;
-//
-//    while (low <= high){
-//
-//        position = low+(((convert_string-buku[low].convert_string)/(buku[high].convert_string-buku[low].convert_string))*(high-low));
-//
-//        if(buku[position].convert_string == convert_string){
-//          	printf("\n======= Data Ditemukan =========\n");
-//			printf("%d  Kode Buku\t = %lld\n", i+1, buku[i].kode);
-//			printf("   Judul buku\t = %s\n", buku[i].judul);
-//			printf("   Pengarang\t = %s\n\n", buku[i].pengarang);
-//            break;
-//        }else if(buku[position].convert_string > convert_string){
-//            high = position - 1;
-//        }else{
-//            low = position + 1;
-//        }
-//    }
-//    
+void interpolation_search(){
+		
+	char cari[30];
+    system("cls");
+
+    printf("=================== Pencarian Data Buku Berdasarkan Judul Buku ==================\n\n");
+
+    // Input kode buku yang ingin dicari
+	printf("Masukkan Judul Buku Yang Ingin Dicari: ");
+	scanf(" %[^\n]", &cari);
+	
+	int low = 0, high = j - 1, match, ketemu = 0;
+	int cari_ulang;
+	float mid;
+    int posisi;
+    
+    while((strcmp(cari, buku[low].judul)>=0) && (strcmp(cari, buku[high].judul)<=0)){
+    	mid = (float) strcmp(cari, buku[low].judul) / strcmp(buku[high].judul, buku[low].judul) * (high - low) + low;
+    	posisi = floor(mid);
+    	
+    	if (strcmp(buku[posisi].judul, cari) == 0){
+            match = posisi;
+            ketemu = 1;
+            break;
+        }
+        
+        if (strcmp(buku[posisi].judul, cari) > 0)
+            high = posisi - 1;
+        else if (strcmp(buku[posisi].judul, cari) < 0)
+            low = posisi + 1;
+	}
+	
+	if (ketemu == 0){
+        printf ("Data Tidak Ditemukan\n");
+        printf("Cari lagi ? [1]yes; [2]no = ");
+        scanf("%d", &cari_ulang);
+        if(cari_ulang == 1){
+        	interpolation_search();
+		}else{
+			MainMenu();
+		}
+        
+    }
+    else {
+           	printf("\n======= Data Ditemukan =========\n");
+			printf("  Kode Buku\t = %lld\n", buku[match].kode);
+			printf("  Judul buku\t = %s\n", buku[match].judul);
+			printf("  Pengarang\t = %s\n\n", buku[match].pengarang);
+            system("pause");
+			MainMenu();
+    }
 }
+
 //cari Judul buku
 void CariJudul(){
 
 	SortNamaBubble();
 	l++;
 	
-	interpolationSearch();
+	interpolation_search();
 	
 	system("pause");
 	MainMenu();
@@ -269,6 +267,7 @@ void close(){
 	printf("\t\t\tTugas Pertemuan 10 : Manajemen Pencarian Buku\n\n");
 	printf("\t\t\tTekan Enter untuk keluar !!!\n\n\n\n");
 	system("pause");
+	//16 November 2021
 }
 
 int main(){
